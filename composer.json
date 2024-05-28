@@ -1,0 +1,20 @@
+{
+    "name": "mmopane/support",
+    "description": "The support package.",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mmopane\\Support\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "mmopane"
+        }
+    ],
+    "require": {
+        "php": ">=8.3"
+    }
+}
