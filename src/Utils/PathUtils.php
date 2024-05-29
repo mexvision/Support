@@ -39,7 +39,7 @@ class PathUtils
     }
 
     /**
-     * Get the regular expression from a path template.
+     * Extract the regular expression from a path template.
      * By default, dynamic path parts have the following pattern: ([A-Za-z0-9-]+).
      * You can redefine your patterns for individual dynamic parameters of the path in the conditions array.
      *
@@ -47,7 +47,7 @@ class PathUtils
      * @param array<string, string> $conditions
      * @return string
      */
-    public static function getRegex(string $pathTemplate, array $conditions = []): string
+    public static function extractRegex(string $pathTemplate, array $conditions = []): string
     {
         $pathTemplate = static::prepare($pathTemplate);
         $segments     = [];
@@ -66,13 +66,13 @@ class PathUtils
     }
 
     /**
-     * Get the names of the dynamic parameters of the path template.
+     * Extract the names of the dynamic parameters of the path template.
      * The path template can contain dynamic parameters: /path/{parameter}.
      *
      * @param string $pathTemplate
      * @return list<string>
      */
-    public static function getParametersNames(string $pathTemplate): array
+    public static function extractParametersNames(string $pathTemplate): array
     {
         $pathTemplate = static::prepare($pathTemplate);
         $matches      = [];
@@ -83,17 +83,33 @@ class PathUtils
     }
 
     /**
-     * Get the values of the dynamic parameters of the path template regex.
+     * Extract the values of the dynamic parameters of the path template regex.
      *
      * @param string $path
      * @param string $regex
      * @return array
      */
-    public static function getParametersValues(string $path, string $regex): array
+    public static function extractParametersValues(string $path, string $regex): array
     {
         $path    = static::prepare($path);
         $matches = [];
         preg_match($regex, $path, $matches);
         return array_slice($matches, 1);
+    }
+
+    /**
+     * Inject the dynamic parameters in the path template.
+     *
+     * @param string $pathTemplate
+     * @param array $parameters
+     * @return string
+     */
+    public function injectParameters(string $pathTemplate, array $parameters = []): string
+    {
+        $pathTemplate = static::prepare($pathTemplate);
+        if (empty($parameters))
+            return $pathTemplate;
+        $keys = array_map(fn($key) => '{' . $key . '}', array_keys($parameters));
+        return str_replace($keys, $parameters, $pathTemplate);
     }
 }
