@@ -104,7 +104,7 @@ class PathUtils
      * @param array $parameters
      * @return string
      */
-    public function injectParameters(string $pathTemplate, array $parameters = []): string
+    public static function injectParameters(string $pathTemplate, array $parameters = []): string
     {
         $pathTemplate = static::prepare($pathTemplate);
         if (empty($parameters))
